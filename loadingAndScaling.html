@@ -1,0 +1,74 @@
+<!------------------------------------------------------------------------
+	 * lab3.html
+	 * Patrick Roderman
+	 * 
+	 * Lab 1 Objectives
+	 *    1. Practice creating HTML documents with embedded JavaScript. 
+	 *	  2. Practice modifying the DOM using the JavaScript Browser API. 
+	 *    
+	 * 	Contents: a function to load an image, and functions to scale all images
+	 ------------------------------------------------------------------------->
+<!DOCTYPE html5> 
+<html>
+	<head>
+		<title>Lab3: Loading and Scaling IMG tags</title>
+	</head>
+	<body>
+	<script> 
+	
+		/**Appends an IMG tag to the body
+		 * @param {String} src
+		 * @param {Integer} width
+		 * @param {Integer} height
+		 */
+		var loadImage = function(src, width, height){
+			//create image with attributes from params
+			var image = document.createElement("img");
+			image.src = src;
+			image.witdth = width;
+			image.height = height;
+			
+			//add body into var
+			var body = document.body;
+			
+			//append new image to body
+			body.appendChild(image);
+		};
+		
+		/**Scales all IMG tag elements by a given percentage
+		 * @param {HTML Element} node 
+		 * @param {Double} scaleFactor
+		 */
+		var scaleImages = function(node, scaleFactor){
+			//Iterate through all children of current node
+			for (var i = 0; i < node.childNodes.length; i++) {
+				var child = node.childNodes[i];
+				//recursive call on all children of each child
+				scaleImages(child, scaleFactor);
+				
+			//Change the width and height if current child is an IMG tag
+			if(child.tagName === "IMG"){
+				child.width *= scaleFactor;
+				child.height *= scaleFactor;
+			}
+			}
+		}
+		
+		/**Scales all IMG tag elements by a given percentage
+		 * @param {Double} scaleFactor
+		 */
+		var scaleAllIMG = function(scaleFactor){
+			
+			var imgList = document.querySelectorAll("img");
+			console.log(imgList);
+			for(var index = 0; index < imgList.length; index++){
+				console.log(imgList[index]);
+				imgList[index].width *= scaleFactor;
+				imgList[index].height *= scaleFactor;
+			}
+			
+		}
+				
+	</script>
+	</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"> 
+		<title>Grayscale</title>
+		<style>
+			body{
+				 background: white;
+			 }
+			button,canvas{
+				display: block;
+				margin: auto;
+				box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+			}
+			canvas{
+				border: 2px solid black;
+				max-width: 400px;
+			}
+			button{
+				margin-top: 5px;
+				padding: 10px;
+				background: white;
+				color: black;
+				border: 1px solid black;
+				cursor: pointer;
+			}
+			button:hover{
+				background: black;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+	<canvas id="cvs"></canvas><br/>
+	<button id="btn">Grayscale</button>
+
+	<script type="text/javascript">
+	/*------------------------------------------------------------------------
+	* Grayscale
+	* Patrick Roderman
+	*
+	* Grayscale Objectives:
+	*  • Load an image and draw it on a canvas.
+	*  • Access and modify pixel data of the canvas context using the ImageData object.
+	*  • Draw a modified ImageData object on a canvas.
+	*  • Create and set up a new Web Worker object.
+	*  • Post an ImageData object to a Web Worker.
+	*  • Receive an ImageData object from a Web Worker.
+	*
+	-------------------------------------------------------------------------*/
+	;(function(imgSrc) {
+			var isOriginal = true;
+			// document.getElementById bind
+			var el = document.getElementById.bind(document);
+					
+			// elements
+			var button = el('btn');
+			var cvs = el("cvs");
+			var ctx = cvs.getContext('2d');
+			
+			// create image obj
+			var img = new Image();
+			// set source
+			img.src = imgSrc;
+			// Load image into an in-memory Image.
+			img.onload = function(e) {
+					cvs.width = img.width;
+					cvs.height = img.height;
+					ctx.drawImage( img, 0, 0 );
+			}
+			// create web worker
+			var grayscaleWorker = new Worker("grayscale.js");
+			
+			// button listener
+			button.onclick = function(e) {
+				if(isOriginal){			
+					// get image data from canvas
+					var durl = ctx.getImageData(0, 0, cvs.width, cvs.height);
+					// get clamped image data array
+					var arr = durl.data;
+					// create object with array
+					var data = { dataURL: arr };
+					
+					//post obj to web worker
+					grayscaleWorker.postMessage(data);
+					
+					button.innerHTML = "Revert";
+					isOriginal = false;
+					
+				}else{
+					// draw initial image if already grayscale
+					ctx.drawImage( img, 0, 0 );
+					isOriginal  = true;
+					button.innerHTML = "Grayscale";
+				}
+					
+			}
+			// listen for messages from worker
+			grayscaleWorker.onmessage = function(e){
+				// create image data with canvas size
+				var imageData = ctx.createImageData(cvs.width, cvs.height);
+				// set data from message
+				imageData.data.set(e.data);
+				// put image on canvas
+				ctx.putImageData(imageData, 0, 0);
+			}
+	
+	})("tree.jpg"); // image source
+
+	</script>
+	</body>
+</html>

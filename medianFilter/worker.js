@@ -6,11 +6,11 @@ self.onmessage = function( e ) {
     var height = e.data.image.height;
     var width = e.data.image.width;
     // create array for new pixel data
-    var pixels = new Uint8ClampedArray( new ArrayBuffer( ( ( height - 2 ) * ( width-2 ) ) * 4) );
+    var pixels = new Uint8ClampedArray( new ArrayBuffer( ( ( height - 2 ) * ( width-2 ) ) * 4 ) );
 
     // filter loop
-    for( var rows=1; rows <= height - 1; rows++ ) {
-        for( var cols=1; cols <= width - 1; cols++ ) {
+    for( var rows = 1; rows <= height - 1; rows++ ) {
+        for( var cols = 1; cols <= width - 1; cols++ ) {
             // get median pixel value
             var pixel = medianPixel( rows, cols, arr );
             // get index
@@ -41,7 +41,7 @@ self.onmessage = function( e ) {
 
 
         // array containing arrays for R,G,B values
-        var borderRGB =[
+        var borderRGB = [
             // Red
             [   
                 pixelData[img00],
@@ -88,7 +88,7 @@ self.onmessage = function( e ) {
     }
 
     function findMedians( multiArray ){
-        var median = [0,0,0];
+        var median = [0, 0, 0];
         // sort and get median index
         median[0] = ( multiArray[0].sort() )[4];
         median[1] = ( multiArray[1].sort() )[4];

@@ -1,20 +1,20 @@
 // JS Worker - handle image data from main script
-self.onmessage = function( e ) {
+self.onmessage = function(e) {
     
     // get data from message
     var arr = e.data.image.data;
     var height = e.data.image.height;
     var width = e.data.image.width;
     // create array for new pixel data
-    var pixels = new Uint8ClampedArray( new ArrayBuffer( ( ( height - 2 ) * ( width-2 ) ) * 4 ) );
+    var pixels = new Uint8ClampedArray( new ArrayBuffer(((height - 2) * (width-2)) * 4) );
 
     // filter loop
-    for( var rows = 1; rows <= height - 1; rows++ ) {
-        for( var cols = 1; cols <= width - 1; cols++ ) {
+    for(var rows = 1; rows <= height - 1; rows++) {
+        for(var cols = 1; cols <= width - 1; cols++) {
             // get median pixel value
-            var pixel = medianPixel( rows, cols, arr );
+            var pixel = medianPixel(rows, cols, arr);
             // get index
-            var index = ( ( rows - 1 ) * width + ( cols - 1 ) ) * 4;
+            var index = ((rows - 1) * width + (cols - 1 )) * 4;
             // assign values
             pixels[index] = pixel[0];
             pixels[index+1] = pixel[1];
@@ -24,20 +24,20 @@ self.onmessage = function( e ) {
     }
 
     // returns the median value from surrounding and center pixels
-    function medianPixel( rows, cols, pixelData ){
+    function medianPixel(rows, cols, pixelData) {
 
         // begining of each pixel's data                    // Coordinates (e.g: center = 1,1)
-        var img00 = ( ( rows - 1) * width + cols - 1) * 4;  // 0,0
-        var img01 = ( ( rows - 1) * width + cols) * 4;      // 0,1
-        var img02 = ( ( rows - 1) * width + cols + 1 ) * 4; // 0,2
+        var img00 = ((rows - 1) * width + cols - 1) * 4;  // 0,0
+        var img01 = ((rows - 1) * width + cols) * 4;      // 0,1
+        var img02 = ((rows - 1) * width + cols + 1) * 4; // 0,2
 
-        var img10 = ( ( rows ) * width + cols - 1 ) * 4;    // 1,0
-        var img11 = ( ( rows ) * width + cols ) * 4;        // 1,1
-        var img12 = ( ( rows ) * width + cols + 1 ) * 4;    // 1,2
+        var img10 = ((rows) * width + cols - 1) * 4;    // 1,0
+        var img11 = ((rows) * width + cols) * 4;        // 1,1
+        var img12 = ((rows) * width + cols + 1) * 4;    // 1,2
 
-        var img20 = ( ( rows+1) * width + cols - 1) * 4;    // 2,0
-        var img21 = ( ( rows+1 ) * width + cols ) * 4 ;     // 2,1
-        var img22 = ( ( rows+1 ) * width + cols + 1 ) * 4;  // 2,2
+        var img20 = ((rows + 1) * width + cols - 1) * 4;    // 2,0
+        var img21 = ((rows + 1) * width + cols) * 4;     // 2,1
+        var img22 = ((rows + 1) * width + cols + 1) * 4;  // 2,2
 
 
         // array containing arrays for R,G,B values
@@ -82,21 +82,21 @@ self.onmessage = function( e ) {
         ];
 
         // find medians from RGB array
-        var rgba = findMedians( borderRGB );
-        rgba.push( 255 );
+        var rgba = findMedians(borderRGB);
+        rgba.push(255);
         return rgba;
     }
 
-    function findMedians( multiArray ){
+    function findMedians(multiArray) {
         var median = [0, 0, 0];
         // sort and get median index
-        median[0] = ( multiArray[0].sort() )[4];
-        median[1] = ( multiArray[1].sort() )[4];
-        median[2] = ( multiArray[2].sort() )[4]; 
+        median[0] = (multiArray[0].sort())[4];
+        median[1] = (multiArray[1].sort())[4];
+        median[2] = (multiArray[2].sort())[4]; 
         return median;
     }
 
     // set new data and post
-    e.data.image.data.set( pixels );
-    self.postMessage( e.data );
+    e.data.image.data.set(pixels);
+    self.postMessage(e.data);
 };

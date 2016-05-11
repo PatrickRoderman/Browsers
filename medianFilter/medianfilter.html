@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Median Filter</title>
+        <style>
+            #ui{
+                padding: 20px;
+                margin: auto;
+                width: 600px;
+                display: block;
+            }
+            #title{
+                display: inline-block;
+            }
+            #btn{
+                display: inline-block;
+                margin: auto;
+                margin-left: 15px;
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+                padding: 10px;
+                background: white;
+                color: black;
+                border: 1px solid black;
+                cursor: pointer;
+            }
+            #btn:hover{
+                background: black;
+                color: white;
+            }
+            #slider{
+                display: inline-block;
+                margin-left: 10%;
+            }
+            #loader{
+                display: none;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                font-size: 40px;
+                text-align: center;
+                background: black;
+                color: white;
+                padding-top: 20%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loader">Applying Filter...</div>
+        <section id="ui">
+            <span id="title">Number of Web Workers</span>
+            <input id="slider" type="range" min="1" max="8"/>
+            <span id="numOfWorkers"></span>
+            <button id="btn">Apply Median Filter</button>
+        </section>
+        <script type="text/javascript" src="manager.js"></script>
+    </body>
+</html>

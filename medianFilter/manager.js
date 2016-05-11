@@ -72,7 +72,12 @@
                 image: context.getImageData( 0, y, canvas.width, height ),
                 y: y
             });
-
+	
+			// error logging
+            workers[i].onerror = function( e ) {
+                console.log( "A web worker error has occured." );
+            }
+						
             // worker onmessage
             workers[i].onmessage = function( e ) { 
                 // y start

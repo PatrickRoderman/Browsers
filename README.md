@@ -1,2 +1,2 @@
-# Browsers
-A series of JS scripts accomplishing small tasks.
+# CSC 470 Browsers @ TCNJ
+A series of JS scripts.
